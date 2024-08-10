@@ -1,5 +1,13 @@
 #include "StateMachine.h"
 
+StateMachine::StateMachine()
+{
+}
+
+StateMachine::~StateMachine()
+{
+}
+
 void StateMachine::AddState(StateRef p_newState, bool p_isReplacing)
 {
 	this->m_isAdding = true;

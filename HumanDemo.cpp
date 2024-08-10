@@ -3,7 +3,16 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
-#include <iostream>
+
+HumanDemo::HumanDemo(GameDataRef p_data, sf::Vector2f p_startPosition, std::vector<std::string>& p_path,
+	std::unique_ptr<std::vector<std::string>>& p_level)
+	: Sprite(p_data, p_startPosition, p_path, p_level)
+{
+}
+
+HumanDemo::~HumanDemo()
+{
+}
 
 void HumanDemo::NextMotion()
 {
@@ -46,7 +55,7 @@ void HumanDemo::NextMotion()
 	if (m_step4 && !m_step5)
 	{
 		m_spriteShape.setTextureRect(this->m_data->assetManager.GetRect("dig"));
-		m_level[((int)m_presentPosition.y + 16) / 16][((int)m_presentPosition.x + 32) / 16] = ' ';
+		m_level[((size_t)m_presentPosition.y + 16) / 16][((size_t)m_presentPosition.x + 32) / 16] = ' ';
 		m_step5 = true;
 	}
 
@@ -80,7 +89,7 @@ void HumanDemo::NextMotion()
 	if (m_step8 && !m_step9)
 	{
 		m_spriteShape.setTextureRect(this->m_data->assetManager.GetRect("dig"));
-		m_level[((int)m_presentPosition.y + 16) / 16][((int)m_presentPosition.x + 32) / 16] = ' ';
+		m_level[((size_t)m_presentPosition.y + 16) / 16][((size_t)m_presentPosition.x + 32) / 16] = ' ';
 		m_step9 = true;
 	}
 
@@ -96,7 +105,7 @@ void HumanDemo::NextMotion()
 	}
 }
 
-bool HumanDemo::EndDemo()
+bool HumanDemo::EndDemo() const
 {
 	return m_endDemo;
 }
@@ -111,9 +120,12 @@ void HumanDemo::Update(float p_deltaTime)
 
 		if (!m_isFalling)
 		{
-			if (!m_isInWall) NextMotion();
-			if (!IsInBounds())m_nextPosition = m_presentPosition;
-			if (!IsOnPath())m_nextPosition = m_presentPosition;
+			if (!m_isInWall)
+				NextMotion();
+			if (!IsInBounds())
+				m_nextPosition = m_presentPosition;
+			if (!IsOnPath())
+				m_nextPosition = m_presentPosition;
 			if (m_isInWall && m_presentPosition.y > 8.0f)
 			{
 				m_nextPosition.y = m_presentPosition.y - 8.0f;
@@ -124,9 +136,9 @@ void HumanDemo::Update(float p_deltaTime)
 			m_nextPosition.y = m_presentPosition.y + 8.0f;
 		}
 
-		if (m_level[((int)m_nextPosition.y) / 16][((int)m_nextPosition.x) / 16] == '*')
+		if (m_level[((size_t)m_nextPosition.y) / 16][((size_t)m_nextPosition.x) / 16] == '*')
 		{
-			m_level[((int)m_nextPosition.y) / 16][((int)m_nextPosition.x) / 16] = ' ';
+			m_level[((size_t)m_nextPosition.y) / 16][((size_t)m_nextPosition.x) / 16] = ' ';
 		}
 
 		UpdateStatus();

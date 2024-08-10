@@ -1,5 +1,14 @@
 #include "AssetManager.h"
 
+AssetManager::AssetManager()
+{
+}
+
+AssetManager::~AssetManager()
+{
+	m_sounds.clear();
+}
+
 void AssetManager::LoadTexture(std::string p_textureName, std::string p_fileName)
 {
 	sf::Texture texture;
@@ -33,15 +42,11 @@ sf::IntRect AssetManager::GetRect(std::string p_rectName)
 
 void AssetManager::LoadSound(std::string p_soundName, std::string p_fileName)
 {
-	sf::SoundBuffer buffer;
-
-	if (buffer.loadFromFile(p_fileName))
-	{
-		this->m_sounds[p_soundName] = buffer;
-	}
+	auto& buff = m_sounds[p_soundName];
+	buff.loadFromFile(p_fileName);
 }
 
-sf::SoundBuffer& AssetManager::GetSound(std::string p_soundName)
+const sf::SoundBuffer& AssetManager::GetSound(std::string p_soundName)
 {
 	return this->m_sounds.at(p_soundName);
 }

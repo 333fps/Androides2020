@@ -15,10 +15,11 @@ class StatePlay : public State
 {
 public:
 	StatePlay(GameDataRef p_data);
-	~StatePlay()
-	{
-		//std::cout << "**State Play Destroyed\t\t" << this << std::endl;
-	}
+
+	StatePlay(StatePlay&) = delete;
+	StatePlay& operator=(StatePlay&) = delete;
+
+	virtual ~StatePlay();
 
 	GameDataRef m_data;
 
@@ -37,10 +38,10 @@ public:
 
 	std::unique_ptr<Game> m_game;
 
-	bool* m_isVictory;
-	bool* m_isDefeat;
-	bool* m_isGameStarted;
-	int* m_remaingLives;
+	bool* m_isVictory = nullptr;
+	bool* m_isDefeat = nullptr;
+	bool* m_isGameStarted = nullptr;
+	int* m_remaingLives = nullptr;
 
 	bool m_totalWinner{ false };
 

@@ -1,12 +1,5 @@
 #include "CurrentLevel.h"
 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <memory>
-
 CurrentLevel::CurrentLevel(unsigned int p_levelNumber)
 {
 	this->m_level = std::make_unique<Levels>(p_levelNumber);
@@ -21,18 +14,22 @@ CurrentLevel::CurrentLevel(unsigned int p_levelNumber)
 	CleanLevel();
 }
 
+CurrentLevel::~CurrentLevel()
+{
+}
+
 void CurrentLevel::HumanStartPosition()
 {
 	int i = 0;
-	for (auto line : *m_currentLevel)
+	for (auto& line : *m_currentLevel)
 	{
 		int j = 0;
 		for (auto c : line)
 		{
 			if (c == '&')
 			{
-				m_humanStartPosition.x = j * 16.0f;
-				m_humanStartPosition.y = i * 16.0f + 8.0f;
+				m_humanStartPosition.x = (float)j * 16.0f;
+				m_humanStartPosition.y = (float)i * 16.0f + 8.0f;
 			}
 			j++;
 		}
@@ -51,8 +48,8 @@ void CurrentLevel::AndroidsStartPositions()
 			if (c == 'A')
 			{
 				sf::Vector2f androidPosition;
-				androidPosition.x = j * 16.0f;
-				androidPosition.y = i * 16.0f + 8.0f;
+				androidPosition.x = (float)j * 16.0f;
+				androidPosition.y = (float)i * 16.0f + 8.0f;
 				m_androidsStartPositions.push_back(androidPosition);
 			}
 			j++;
@@ -64,18 +61,18 @@ void CurrentLevel::AndroidsStartPositions()
 void CurrentLevel::LevelColor()
 {
 	std::string strRGBr = m_levelSettings.substr(0, 3);
-	int m_RGBr = std::stoi(strRGBr);
+	auto RGBr = (sf::Uint8)std::stoi(strRGBr);
 
 	std::string strRGBg = m_levelSettings.substr(3, 3);
-	int m_RGBg = std::stoi(strRGBg);
+	auto RGBg = (sf::Uint8)std::stoi(strRGBg);
 
 	std::string strRGBb = m_levelSettings.substr(6, 3);
-	int m_RGBb = std::stoi(strRGBb);
+	auto RGBb = (sf::Uint8)std::stoi(strRGBb);
 
 	std::string strRGBa = m_levelSettings.substr(9, 3);
-	int m_RGBa = std::stoi(strRGBa);
+	auto RGBa = (sf::Uint8)std::stoi(strRGBa);
 
-	m_levelColor = sf::Color(m_RGBr, m_RGBg, m_RGBb, m_RGBa);
+	m_levelColor = sf::Color(RGBr, RGBg, RGBb, RGBa);
 }
 
 void CurrentLevel::LevelTimer()
@@ -86,10 +83,8 @@ void CurrentLevel::LevelTimer()
 
 void CurrentLevel::CleanLevel()
 {
-	int i = 0;
 	for (auto line = m_currentLevel->begin(); line != m_currentLevel->end(); line++)
 	{
-		int j = 0;
 		for (auto c = line->begin(); c != line->end(); ++c)
 		{
 			if (*c == '&' || *c == 'A')
@@ -100,10 +95,7 @@ void CurrentLevel::CleanLevel()
 			{
 				++m_totalBonus;
 			}
-
-			j++;
 		}
-		i++;
 	}
 }
 
@@ -129,7 +121,7 @@ int& CurrentLevel::GetTotalBonus()
 
 const sf::Vector2f& CurrentLevel::GetHumanStartPosition() const
 {
-	return  m_humanStartPosition;
+	return m_humanStartPosition;
 }
 
 const std::vector<sf::Vector2f> CurrentLevel::GetAndroidsStartPositions() const

@@ -1,12 +1,8 @@
 #include "DEFINITIONS.h"
 #include "Game.h"
-#include <iostream>
 
-Game::Game(GameDataRef p_data) :
-	m_data(p_data)
+Game::Game(GameDataRef p_data) : m_data(p_data)
 {
-	//std::cout << "Game Created\t\t\t" << this << std::endl;
-
 	// TEXT
 	m_str_txtScore.setFont(this->m_data->assetManager.GetFont("LodeRunner"));
 	m_str_txtScore.setCharacterSize(TILE_SIZE);
@@ -26,7 +22,7 @@ Game::Game(GameDataRef p_data) :
 	m_str_txtLevel.setFillColor(sf::Color(042, 042, 255, 255));
 	m_str_txtLevel.setPosition(sf::Vector2f(TILE_SIZE * 24 + TILE_SIZE / 2, TILE_SIZE * 23));
 
-	//VARIABLES
+	// VARIABLES
 	m_str_valScore.setFont(this->m_data->assetManager.GetFont("LodeRunner"));
 	m_str_valScore.setCharacterSize(TILE_SIZE);
 	m_str_valScore.setString(sf::String("000000"));
@@ -61,13 +57,17 @@ Game::Game(GameDataRef p_data) :
 	this->m_blinkerRect.setOrigin(sf::Vector2f(0.0f, TILE_SIZE / 2));
 	this->m_blinkerRect.setFillColor(sf::Color::Yellow);
 
-	//Sounds
+	// Sounds
 	this->m_beep.setBuffer(this->m_data->assetManager.GetSound("beep"));
 	this->m_catch.setBuffer(this->m_data->assetManager.GetSound("hit"));
 	this->m_tick.setBuffer(this->m_data->assetManager.GetSound("tick"));
 	this->m_tada.setBuffer(this->m_data->assetManager.GetSound("win"));
 	this->m_bonus.setBuffer(this->m_data->assetManager.GetSound("bonus"));
 	this->m_dig.setBuffer(this->m_data->assetManager.GetSound("dig"));
+}
+
+Game::~Game()
+{
 }
 
 void Game::ChangeBlinkTexture()
@@ -124,9 +124,9 @@ void Game::LevelScore()
 	}
 
 	std::string tmp = std::to_string(m_levelScore);
-	int strLen = tmp.length();
+	auto strLen = tmp.length();
 
-	int numberOfZero = 6 - strLen;
+	auto numberOfZero = 6 - strLen;
 
 	std::string final = std::string(numberOfZero, '0').append(tmp);
 
@@ -188,9 +188,9 @@ void Game::SetHumanDig(bool& p_dig)
 void Game::SetLevel(int p_levelNumber)
 {
 	std::string tmp = std::to_string(p_levelNumber);
-	int strLen = tmp.length();
+	auto strLen = tmp.length();
 
-	int numberOfZero = 3 - strLen;
+	auto numberOfZero = 3 - strLen;
 
 	std::string final = std::string(numberOfZero, '0').append(tmp);
 
@@ -201,9 +201,9 @@ void Game::SetTimer(int p_levelTimer)
 {
 	m_levelTimer = p_levelTimer;
 	std::string tmp = std::to_string(p_levelTimer);
-	int strLen = tmp.length();
+	auto strLen = tmp.length();
 
-	int numberOfZero = 3 - strLen;
+	auto numberOfZero = 3 - strLen;
 
 	std::string final = std::string(numberOfZero, '0').append(tmp);
 
@@ -235,7 +235,7 @@ int* Game::GetRemainingLives()
 	return &m_remaingLives;
 }
 
-bool Game::IsGameStarted()
+bool Game::IsGameStarted() const
 {
 	return m_isGameStarted;
 }
@@ -245,7 +245,7 @@ void Game::StartBlinker()
 	m_isBlinkerOn = true;
 }
 
-int Game::GetFinalSCore()
+int Game::GetFinalSCore() const
 {
 	return m_levelScore;
 }

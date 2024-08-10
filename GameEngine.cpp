@@ -3,12 +3,15 @@
 
 GameEngine::GameEngine(int p_width, int p_height, std::string p_title)
 {
-	this->m_data->window.create(sf::VideoMode(p_width, p_height), p_title, sf::Style::Default);
-	this->m_data->window.setFramerateLimit(60);
+	m_data = std::make_shared<GameData>();
+
 	this->m_data->stateMachine.AddState(StateRef(new StateSplash(this->m_data)));
 
-	this->Run();
+	this->m_data->window.create(sf::VideoMode((unsigned)p_width, (unsigned)p_height), p_title, sf::Style::Default);
+	this->m_data->window.setFramerateLimit(60);
 }
+
+GameEngine::~GameEngine() {}
 
 void GameEngine::Run()
 {
@@ -43,4 +46,12 @@ void GameEngine::Run()
 		interpolation = accumulator / dt;
 		this->m_data->stateMachine.GetActiveState()->Draw(interpolation);
 	}
+}
+
+GameData::GameData()
+{
+}
+
+GameData::~GameData()
+{
 }

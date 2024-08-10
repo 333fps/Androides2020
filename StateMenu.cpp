@@ -4,12 +4,14 @@
 
 #include "DEFINITIONS.h"
 
-#include <iostream>
 #include <memory>
 
-StateMenu::StateMenu(GameDataRef p_data) : m_data(p_data)
+StateMenu::StateMenu(GameDataRef p_data) : State{ p_data }, m_data(p_data)
 {
-	//std::cout << "\nState Menu Created\t\t" << this << std::endl;
+}
+
+StateMenu::~StateMenu()
+{
 }
 
 void StateMenu::Init()
@@ -23,7 +25,7 @@ void StateMenu::Init()
 
 	for (auto startPosition : m_currentLevel->GetAndroidsStartPositions())
 	{
-		auto android = std::make_shared< AndroidDemo>(m_data, startPosition, m_map->GetPath(), m_currentLevel->GetLevel());
+		auto android = std::make_shared<AndroidDemo>(m_data, startPosition, m_map->GetPath(), m_currentLevel->GetLevel());
 		m_androids.push_back(android);
 	}
 
@@ -31,27 +33,27 @@ void StateMenu::Init()
 	this->m_str_start.setCharacterSize(TILE_SIZE);
 	this->m_str_start.setString(sf::String("SPACEBAR TO START"));
 	this->m_str_start.setFillColor(sf::Color(255, 255, 000, 255));
-	this->m_str_start.setPosition(sf::Vector2f((SCREEN_WIDTH / 2 - m_str_start.getGlobalBounds().width / 2), (SCREEN_HEIGHT / 2) + static_cast<int>(1.5 * TILE_SIZE)));
+	this->m_str_start.setPosition(sf::Vector2f((SCREEN_WIDTH / 2.f - m_str_start.getGlobalBounds().width / 2.f), (SCREEN_HEIGHT / 2.f) + static_cast<int>(1.5f * TILE_SIZE)));
 
 	this->m_str_how_to1.setFont(this->m_data->assetManager.GetFont("LodeRunner"));
-	this->m_str_how_to1.setCharacterSize(static_cast <int>(0.8 * TILE_SIZE));
+	this->m_str_how_to1.setCharacterSize(static_cast<int>(0.8f * TILE_SIZE));
 	this->m_str_how_to1.setString(sf::String("ARROWS TO MOVE"));
 	this->m_str_how_to1.setFillColor(sf::Color(255, 000, 000, 255));
-	this->m_str_how_to1.setPosition(sf::Vector2f((SCREEN_WIDTH / 2 - m_str_how_to1.getGlobalBounds().width / 2), this->m_str_start.getPosition().y + static_cast<int>(TILE_SIZE * 1.5)));
+	this->m_str_how_to1.setPosition(sf::Vector2f((SCREEN_WIDTH / 2.f - m_str_how_to1.getGlobalBounds().width / 2), this->m_str_start.getPosition().y + static_cast<int>(TILE_SIZE * 1.5f)));
 
 	this->m_str_how_to2 = this->m_str_how_to1;
-	this->m_str_how_to2.setCharacterSize(static_cast <int>(0.6 * TILE_SIZE));
+	this->m_str_how_to2.setCharacterSize(static_cast<int>(0.6f * TILE_SIZE));
 	this->m_str_how_to2.setString(sf::String("SPACEBAR TO DIG"));
-	this->m_str_how_to2.setPosition(sf::Vector2f((SCREEN_WIDTH / 2 - m_str_how_to2.getGlobalBounds().width / 2), this->m_str_how_to1.getPosition().y + static_cast<int>(this->m_str_how_to1.getCharacterSize() * 1.5)));
+	this->m_str_how_to2.setPosition(sf::Vector2f(((float)SCREEN_WIDTH / 2.f - m_str_how_to2.getGlobalBounds().width / 2.f), this->m_str_how_to1.getPosition().y + static_cast<float>(this->m_str_how_to1.getCharacterSize()) * 1.5f));
 
 	this->m_str_toggle_fullscreen = this->m_str_how_to2;
-	this->m_str_toggle_fullscreen.setCharacterSize(static_cast<int>(0.4 * TILE_SIZE));
+	this->m_str_toggle_fullscreen.setCharacterSize(static_cast<int>(0.4f * TILE_SIZE));
 	this->m_str_toggle_fullscreen.setString(sf::String("F TO TOGGLE FULLSCREEN"));
-	this->m_str_toggle_fullscreen.setPosition(sf::Vector2f((SCREEN_WIDTH / 2 - m_str_toggle_fullscreen.getGlobalBounds().width / 2), this->m_str_how_to2.getPosition().y + static_cast<int>(this->m_str_how_to2.getCharacterSize() * 1.5)));
+	this->m_str_toggle_fullscreen.setPosition(sf::Vector2f((SCREEN_WIDTH / 2.f - m_str_toggle_fullscreen.getGlobalBounds().width / 2.f), this->m_str_how_to2.getPosition().y + static_cast<float>(this->m_str_how_to2.getCharacterSize()) * 1.5f));
 	this->m_str_demo_countdown = this->m_str_how_to1;
 	this->m_str_demo_countdown.setString(sf::String("Demo within 15 seconds"));
 	this->m_str_demo_countdown.setFillColor(sf::Color(255, 255, 000, 255));
-	this->m_str_demo_countdown.setPosition(sf::Vector2f((SCREEN_WIDTH / 2 - m_str_demo_countdown.getGlobalBounds().width / 2), (SCREEN_HEIGHT / 2) + static_cast <int>(6.5 * TILE_SIZE)));
+	this->m_str_demo_countdown.setPosition(sf::Vector2f((SCREEN_WIDTH / 2.f - m_str_demo_countdown.getGlobalBounds().width / 2.f), (SCREEN_HEIGHT / 2.f) + static_cast<int>(6.5f * TILE_SIZE)));
 
 	this->m_str_credits1.setFont(this->m_data->assetManager.GetFont("LodeRunner"));
 	this->m_str_credits1.setCharacterSize(TILE_SIZE / 2);
@@ -61,7 +63,7 @@ void StateMenu::Init()
 
 	this->m_str_credits2 = this->m_str_credits1;
 	this->m_str_credits2.setString(sf::String("For Gamecodeur Game Jam #24 on itch.io         www.gamecodeur.fr"));
-	m_str_credits2.setPosition(0, TILE_SIZE * 24 - TILE_SIZE / 2);
+	m_str_credits2.setPosition(0.f, TILE_SIZE * 24.f - TILE_SIZE / 2.f);
 
 	this->m_fadeIn->Start();
 }
@@ -79,9 +81,9 @@ void StateMenu::ToggleFullscren()
 void StateMenu::SetTimer(int p_levelTimer)
 {
 	std::string tmp = std::to_string(p_levelTimer);
-	int strLen = tmp.length();
+	auto strLen = tmp.length();
 
-	int numberOfZero = 2 - strLen;
+	auto numberOfZero = 2 - strLen;
 
 	std::string timer = std::string(numberOfZero, '0').append(tmp);
 
@@ -118,19 +120,22 @@ void StateMenu::HandleInput()
 			this->m_data->window.close();
 		}
 
-		if (event.type == sf::Event::Resized) {
+		if (event.type == sf::Event::Resized)
+		{
 			auto m_window_width = event.size.width;
 			auto m_window_height = event.size.height;
-			float new_width = ASPECT_RATIO * m_window_height;
-			float new_height = m_window_width / ASPECT_RATIO;
-			float offset_width = (m_window_width - new_width) / 2.0f;
-			float offset_height = (m_window_height - new_height) / 2.0f;
+			float new_width = ASPECT_RATIO * (float)m_window_height;
+			float new_height = (float)m_window_width / ASPECT_RATIO;
+			float offset_width = ((float)m_window_width - new_width) / 2.0f;
+			float offset_height = ((float)m_window_height - new_height) / 2.0f;
 			sf::View view = m_data->window.getDefaultView();
-			if (m_window_width >= ASPECT_RATIO * m_window_height) {
-				view.setViewport(sf::FloatRect(offset_width / m_window_width, 0.0, new_width / m_window_width, 1.0));
+			if ((float)m_window_width >= ASPECT_RATIO * (float)m_window_height)
+			{
+				view.setViewport(sf::FloatRect(offset_width / (float)m_window_width, 0.f, new_width / (float)m_window_width, 1.f));
 			}
-			else {
-				view.setViewport(sf::FloatRect(0.0, offset_height / m_window_height, 1.0, new_height / m_window_height));
+			else
+			{
+				view.setViewport(sf::FloatRect(0.f, offset_height / (float)m_window_height, 1.f, new_height / (float)m_window_height));
 			}
 
 			m_data->window.setView(view);
@@ -195,6 +200,8 @@ void StateMenu::Update(float dt)
 
 void StateMenu::Draw(float dt)
 {
+	(void)dt;
+
 	this->m_data->window.clear();
 
 	for (auto const& android : m_androids)

@@ -10,15 +10,14 @@
 class HumanDemo : public Sprite
 {
 public:
-	HumanDemo(GameDataRef p_data, sf::Vector2f p_startPosition, std::vector<std::string>& p_path, std::unique_ptr<std::vector<std::string>>& p_level) :
-		Sprite(p_data, p_startPosition, p_path, p_level)
-	{
-		//std::cout << "Human Created\t\t\t" << this << std::endl;
-	}
-	~HumanDemo()
-	{
-		//std::cout << "**Human Destroyed\t\t" << this << std::endl;
-	}
+	HumanDemo(GameDataRef p_data, sf::Vector2f p_startPosition, std::vector<std::string>& p_path,
+		std::unique_ptr<std::vector<std::string>>& p_level);
+
+	HumanDemo(HumanDemo&) = delete;
+	HumanDemo& operator=(HumanDemo&) = delete;
+
+	virtual ~HumanDemo();
+
 private:
 	void NextMotion();
 
@@ -36,7 +35,7 @@ private:
 	bool m_endDemo{ false };
 
 public:
-	bool EndDemo();
+	bool EndDemo() const;
 	void Update(float p_deltaTime);
 	sf::Vector2f* GetHumanPosition();
 };

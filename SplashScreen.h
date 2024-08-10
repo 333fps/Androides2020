@@ -5,22 +5,16 @@
 
 #include "GameEngine.h"
 
-#include <string>
-#include <iostream>
-
 class SplashScreen
 {
 public:
 	SplashScreen(GameDataRef p_data);
-	~SplashScreen()
-	{
-		//std::cout << "**Splashscreen Destroyed\t" << this << std::endl;
-	};
+	~SplashScreen();
 
 private:
 	GameDataRef m_data;
 
-	sf::RectangleShape  m_shape_machineName;
+	sf::RectangleShape m_shape_machineName;
 
 	sf::Text m_txt_machineName;
 	sf::Text m_txt_ThomsonBrand;
@@ -28,9 +22,9 @@ private:
 	sf::Text m_txt_date;
 	sf::Text m_txt_ram;
 
-	sf::RectangleShape  m_shape_separator1;
-	sf::RectangleShape  m_shape_separator2;
-	sf::RectangleShape  m_shape_separator3;
+	sf::RectangleShape m_shape_separator1;
+	sf::RectangleShape m_shape_separator2;
+	sf::RectangleShape m_shape_separator3;
 
 	sf::RectangleShape m_opticalPenBox1;
 	sf::RectangleShape m_opticalPenBox2;

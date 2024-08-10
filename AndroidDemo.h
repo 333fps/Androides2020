@@ -6,20 +6,17 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
-#include <iostream>
 
 class AndroidDemo : public Sprite
 {
 public:
-	AndroidDemo(GameDataRef p_data, sf::Vector2f& p_startPosition, std::vector<std::string>& p_path, std::unique_ptr<std::vector<std::string>>& p_level) :
-		Sprite(p_data, p_startPosition, p_path, p_level)
-	{
-		//std::cout << "Android Demo Created\t\t" << this << std::endl;
-	}
-	~AndroidDemo()
-	{
-		//std::cout << "**Android Demo Destroyed\t" << this << std::endl;
-	}
+	AndroidDemo(GameDataRef p_data, sf::Vector2f& p_startPosition, std::vector<std::string>& p_path,
+		std::unique_ptr<std::vector<std::string>>& p_level);
+
+	AndroidDemo(AndroidDemo&) = delete;
+	AndroidDemo& operator=(AndroidDemo&) = delete;
+
+	virtual ~AndroidDemo();
 
 private:
 	void NextMotion();

@@ -2,10 +2,12 @@
 #include "StateMenu.h"
 #include "DEFINITIONS.h"
 
-StateSplash::StateSplash(GameDataRef p_data) :
-	m_data(p_data)
+StateSplash::StateSplash(GameDataRef p_data) : State{ p_data }, m_data(p_data)
 {
-	//std::cout << "State Splashscreen Created\t" << this << std::endl;
+}
+
+StateSplash::~StateSplash()
+{
 }
 
 void StateSplash::ToggleFullscren()
@@ -18,15 +20,15 @@ void StateSplash::ToggleFullscren()
 
 void StateSplash::Init()
 {
-	//Loading fonts
+	// Loading fonts
 	this->m_data->assetManager.LoadFont("Microgramma", FONT_MICROGRAMMA);
 	this->m_data->assetManager.LoadFont("Thomson", FONT_THOMSON);
 	this->m_data->assetManager.LoadFont("LodeRunner", FONT_LODE_RUNNER);
 
-	//Loading textures
+	// Loading textures
 	this->m_data->assetManager.LoadTexture("spritesheet", SPRITESHEET);
 
-	//Set rects/
+	// Set rects/
 	this->m_data->assetManager.SetRect("wait", 0, 32, 16, 16);
 	this->m_data->assetManager.SetRect("ladder", 48, 32, 16, 16);
 	this->m_data->assetManager.SetRect("falling", 16, 32, 16, 16);
@@ -42,7 +44,7 @@ void StateSplash::Init()
 
 	this->m_data->assetManager.SetRect("brick", 0, 48, 16, 16);
 
-	//Sounds
+	// Sounds
 	this->m_data->assetManager.LoadSound("beep", SOUND_BEEP);
 	this->m_data->assetManager.LoadSound("hit", SOUND_HIT);
 	this->m_data->assetManager.LoadSound("tick", SOUND_TICK);
@@ -50,11 +52,9 @@ void StateSplash::Init()
 	this->m_data->assetManager.LoadSound("bonus", SOUND_BONUS);
 	this->m_data->assetManager.LoadSound("dig", SOUND_DIG);
 
-	//Objects
+	// Objects
 	this->m_splashScreen = std::make_unique<SplashScreen>(m_data);
 	this->m_fadeOut = std::make_unique<Transition>(m_data, "FadeOut", true);
-
-	this->m_clock.restart(); // <- To allow time to load assets
 }
 
 void StateSplash::HandleInput()
@@ -68,19 +68,22 @@ void StateSplash::HandleInput()
 			this->m_data->window.close();
 		}
 
-		if (event.type == sf::Event::Resized) {
+		if (event.type == sf::Event::Resized)
+		{
 			auto m_window_width = event.size.width;
 			auto m_window_height = event.size.height;
-			float new_width = ASPECT_RATIO * m_window_height;
-			float new_height = m_window_width / ASPECT_RATIO;
-			float offset_width = (m_window_width - new_width) / 2.0f;
-			float offset_height = (m_window_height - new_height) / 2.0f;
+			float new_width = ASPECT_RATIO * (float)m_window_height;
+			float new_height = (float)m_window_width / ASPECT_RATIO;
+			float offset_width = ((float)m_window_width - new_width) / 2.0f;
+			float offset_height = ((float)m_window_height - new_height) / 2.0f;
 			sf::View view = m_data->window.getDefaultView();
-			if (m_window_width >= ASPECT_RATIO * m_window_height) {
-				view.setViewport(sf::FloatRect(offset_width / m_window_width, 0.0, new_width / m_window_width, 1.0));
+			if ((float)m_window_width >= ASPECT_RATIO * (float)m_window_height)
+			{
+				view.setViewport(sf::FloatRect(offset_width / (float)m_window_width, 0.f, new_width / (float)m_window_width, 1.f));
 			}
-			else {
-				view.setViewport(sf::FloatRect(0.0, offset_height / m_window_height, 1.0, new_height / m_window_height));
+			else
+			{
+				view.setViewport(sf::FloatRect(0.f, offset_height / (float)m_window_height, 1.f, new_height / (float)m_window_height));
 			}
 
 			m_data->window.setView(view);
@@ -120,6 +123,7 @@ void StateSplash::Update(float dt)
 
 void StateSplash::Draw(float dt)
 {
+	(void)dt;
 	this->m_data->window.clear(COLOR_CYAN);
 
 	this->m_splashScreen->Draw();

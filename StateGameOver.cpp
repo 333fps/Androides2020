@@ -2,16 +2,18 @@
 
 #include "DEFINITIONS.h"
 
-#include <iostream>
 #include <memory>
 
-StateGameOver::StateGameOver(GameDataRef p_data, int p_finalScore, int p_finalLevel) :
-	m_data(p_data),
-	m_finalScore(p_finalScore),
-	m_finalLevel(p_finalLevel)
+StateGameOver::StateGameOver(GameDataRef p_data, int p_finalScore, int p_finalLevel) : State{ p_data },
+																					   m_data(p_data),
+																					   m_finalScore(p_finalScore),
+																					   m_finalLevel(p_finalLevel)
 
 {
-	//std::cout << "\nState GameOver Created\t\t" << this << std::endl;
+}
+
+StateGameOver::~StateGameOver()
+{
 }
 
 void StateGameOver::ToggleFullscren()
@@ -33,7 +35,7 @@ void StateGameOver::Init()
 
 	for (auto startPosition : m_currentLevel->GetAndroidsStartPositions())
 	{
-		auto android = std::make_shared< AndroidDemo>(m_data, startPosition, m_map->GetPath(), m_currentLevel->GetLevel());
+		auto android = std::make_shared<AndroidDemo>(m_data, startPosition, m_map->GetPath(), m_currentLevel->GetLevel());
 		m_androids.push_back(android);
 	}
 
@@ -80,9 +82,9 @@ void StateGameOver::Init()
 void StateGameOver::Score()
 {
 	std::string tmp = std::to_string(m_finalScore);
-	int strLen = tmp.length();
+	auto strLen = tmp.length();
 
-	int numberOfZero = 6 - strLen;
+	auto numberOfZero = 6 - strLen;
 
 	std::string final = std::string(numberOfZero, '0').append(tmp);
 
@@ -92,9 +94,9 @@ void StateGameOver::Score()
 void StateGameOver::Level()
 {
 	std::string tmp = std::to_string(m_finalLevel);
-	int strLen = tmp.length();
+	auto strLen = tmp.length();
 
-	int numberOfZero = 3 - strLen;
+	auto numberOfZero = 3 - strLen;
 
 	std::string level = std::string(numberOfZero, '0').append(tmp);
 
@@ -115,19 +117,22 @@ void StateGameOver::HandleInput()
 			this->m_data->window.close();
 		}
 
-		if (event.type == sf::Event::Resized) {
+		if (event.type == sf::Event::Resized)
+		{
 			auto m_window_width = event.size.width;
 			auto m_window_height = event.size.height;
-			float new_width = ASPECT_RATIO * m_window_height;
-			float new_height = m_window_width / ASPECT_RATIO;
-			float offset_width = (m_window_width - new_width) / 2.0f;
-			float offset_height = (m_window_height - new_height) / 2.0f;
+			float new_width = ASPECT_RATIO * (float)m_window_height;
+			float new_height = (float)m_window_width / ASPECT_RATIO;
+			float offset_width = ((float)m_window_width - new_width) / 2.0f;
+			float offset_height = ((float)m_window_height - new_height) / 2.0f;
 			sf::View view = m_data->window.getDefaultView();
-			if (m_window_width >= ASPECT_RATIO * m_window_height) {
-				view.setViewport(sf::FloatRect(offset_width / m_window_width, 0.0, new_width / m_window_width, 1.0));
+			if ((float)m_window_width >= ASPECT_RATIO * (float)m_window_height)
+			{
+				view.setViewport(sf::FloatRect(offset_width / (float)m_window_width, 0.f, new_width / (float)m_window_width, 1.f));
 			}
-			else {
-				view.setViewport(sf::FloatRect(0.0, offset_height / m_window_height, 1.0, new_height / m_window_height));
+			else
+			{
+				view.setViewport(sf::FloatRect(0.f, offset_height / (float)m_window_height, 1.f, new_height / (float)m_window_height));
 			}
 
 			m_data->window.setView(view);
@@ -180,6 +185,7 @@ void StateGameOver::Update(float dt)
 
 void StateGameOver::Draw(float dt)
 {
+	(void)dt;
 	this->m_data->window.clear();
 
 	for (auto const& android : m_androids)
@@ -188,7 +194,7 @@ void StateGameOver::Draw(float dt)
 	}
 
 	this->m_map->Draw();
-	//this->m_map->DrawPath();
+	// this->m_map->DrawPath();
 
 	this->m_data->window.draw(m_str_finalScore);
 	this->m_data->window.draw(m_str_finalLevel);

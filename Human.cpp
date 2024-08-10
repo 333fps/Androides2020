@@ -3,7 +3,16 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
-#include <iostream>
+
+Human::Human(GameDataRef p_data, sf::Vector2f p_startPosition, std::vector<std::string>& p_path,
+	std::unique_ptr<std::vector<std::string>>& p_level)
+	: Sprite(p_data, p_startPosition, p_path, p_level)
+{
+}
+
+Human::~Human()
+{
+}
 
 void Human::NextMotion()
 {
@@ -35,14 +44,14 @@ void Human::NextMotion()
 	m_isDigging = false;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		if (m_level[((int)m_presentPosition.y + 16) / 16][((int)m_presentPosition.x - 16) / 16] == '@')
+		if (m_level[((size_t)m_presentPosition.y + 16) / 16][((size_t)m_presentPosition.x - 16) / 16] == '@')
 		{
 			m_isDigging = true;
 			if (m_presentPosition.y < (344 - 8) && m_presentPosition.x >= 16)
 			{
-				if (m_level[((int)m_presentPosition.y + 16) / 16][((int)m_presentPosition.x - 16) / 16] == '@')
+				if (m_level[((size_t)m_presentPosition.y + 16) / 16][((size_t)m_presentPosition.x - 16) / 16] == '@')
 				{
-					m_level[((int)m_presentPosition.y + 16) / 16][((int)m_presentPosition.x - 16) / 16] = 'X';
+					m_level[((size_t)m_presentPosition.y + 16) / 16][((size_t)m_presentPosition.x - 16) / 16] = 'X';
 				}
 			}
 		}
@@ -51,16 +60,16 @@ void Human::NextMotion()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		if (m_level[((int)m_presentPosition.y + 16) / 16][((int)m_presentPosition.x + 16) / 16] == '@')
+		if (m_level[((size_t)m_presentPosition.y + 16) / 16][((size_t)m_presentPosition.x + 16) / 16] == '@')
 		{
 			m_isDigging = true;
 			if (m_presentPosition.y < (344 - 8))
 			{
 				if (m_presentPosition.y < (344 - 8) && m_presentPosition.x < (40 * 16))
 				{
-					if (m_level[((int)m_presentPosition.y + 16) / 16][((int)m_presentPosition.x + 16) / 16] == '@')
+					if (m_level[((size_t)m_presentPosition.y + 16) / 16][((size_t)m_presentPosition.x + 16) / 16] == '@')
 					{
-						m_level[((int)m_presentPosition.y + 16) / 16][((int)m_presentPosition.x + 16) / 16] = 'X';
+						m_level[((size_t)m_presentPosition.y + 16) / 16][((size_t)m_presentPosition.x + 16) / 16] = 'X';
 					}
 				}
 			}
@@ -79,9 +88,12 @@ void Human::Update(float p_deltaTime)
 
 		if (!m_isFalling)
 		{
-			if (!m_isInWall) NextMotion();
-			if (!IsInBounds())m_nextPosition = m_presentPosition;
-			if (!IsOnPath())m_nextPosition = m_presentPosition;
+			if (!m_isInWall)
+				NextMotion();
+			if (!IsInBounds())
+				m_nextPosition = m_presentPosition;
+			if (!IsOnPath())
+				m_nextPosition = m_presentPosition;
 			if (m_isInWall && m_presentPosition.y > 8.0f)
 			{
 				m_nextPosition.y = m_presentPosition.y - 8.0f;
@@ -92,9 +104,9 @@ void Human::Update(float p_deltaTime)
 			m_nextPosition.y = m_presentPosition.y + 8.0f;
 		}
 
-		if (m_level[((int)m_nextPosition.y) / 16][((int)m_nextPosition.x) / 16] == '*')
+		if (m_level[((size_t)m_nextPosition.y) / 16][((size_t)m_nextPosition.x) / 16] == '*')
 		{
-			m_level[((int)m_nextPosition.y) / 16][((int)m_nextPosition.x) / 16] = ' ';
+			m_level[((size_t)m_nextPosition.y) / 16][((size_t)m_nextPosition.x) / 16] = ' ';
 		}
 
 		UpdateStatus();

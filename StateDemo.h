@@ -15,10 +15,11 @@ class StateDemo : public State
 {
 public:
 	StateDemo(GameDataRef p_data);
-	~StateDemo()
-	{
-		//std::cout << "**State Play Destroyed\t\t" << this << std::endl;
-	}
+
+	StateDemo(StateDemo&) = delete;
+	StateDemo& operator=(StateDemo&) = delete;
+
+	virtual ~StateDemo();
 
 	GameDataRef m_data;
 

@@ -1,27 +1,35 @@
 #include "Sprite.h"
 #include "DEFINITIONS.h"
 
-Sprite::Sprite(GameDataRef p_data, sf::Vector2f& p_startPosition, std::vector<std::string>& p_path, std::unique_ptr<std::vector<std::string>>& p_level, const sf::Vector2f* p_humanPostion, float p_dtOffset) :
-	m_data(p_data),
-	m_level(*p_level),
-	m_path(p_path),
-	m_startPosition(p_startPosition)
+Sprite::Sprite(GameDataRef p_data, const sf::Vector2f& p_startPosition, std::vector<std::string>& p_path,
+	std::unique_ptr<std::vector<std::string>>& p_level, const sf::Vector2f* p_humanPostion, float p_dtOffset)
+	: m_data(p_data),
+	  m_level(*p_level),
+	  m_path(p_path),
+	  m_startPosition(p_startPosition)
 {
+	(void)p_dtOffset;
+	(void)p_humanPostion;
 	Init();
 	m_dtMax = 0.15f;
 
 	m_spriteShape.setColor(sf::Color::Red);
 }
 
-Sprite::Sprite(GameDataRef p_data, sf::Vector2f& p_startPosition, std::vector<std::string>& p_path, std::unique_ptr<std::vector<std::string>>& p_level) :
-	m_data(p_data),
-	m_level(*p_level),
-	m_path(p_path),
-	m_startPosition(p_startPosition)
+Sprite::Sprite(GameDataRef p_data, const sf::Vector2f& p_startPosition, std::vector<std::string>& p_path,
+	std::unique_ptr<std::vector<std::string>>& p_level)
+	: m_data(p_data),
+	  m_level(*p_level),
+	  m_path(p_path),
+	  m_startPosition(p_startPosition)
 {
 	Init();
 	m_dtMax = 0.1f;
 	m_spriteShape.setColor(sf::Color::Yellow);
+}
+
+Sprite::~Sprite()
+{
 }
 
 void Sprite::Init()
@@ -96,7 +104,7 @@ sf::IntRect Sprite::NextRopeFrame()
 	return m_animRope[m_ropeFrame];
 }
 
-bool Sprite::IsInBounds()
+bool Sprite::IsInBounds() const
 {
 	if (m_nextPosition.x < 0 || m_nextPosition.x > 624 || m_nextPosition.y < 8 || m_nextPosition.y > 344)
 	{
@@ -110,12 +118,12 @@ bool Sprite::IsInBounds()
 
 bool Sprite::IsOnPath()
 {
-	if (m_path[(int)m_nextPosition.y / 8][(int)m_nextPosition.x / 16] == 'f' && m_nextPosition.y < m_presentPosition.y)
+	if (m_path[(size_t)m_nextPosition.y / 8][(size_t)m_nextPosition.x / 16] == 'f' && m_nextPosition.y < m_presentPosition.y)
 	{
 		return false;
 	}
 
-	if (m_path[(int)m_nextPosition.y / 8][(int)m_nextPosition.x / 16] == 'w' || m_path[(int)m_nextPosition.y / 8][(int)m_nextPosition.x / 16] == 'f')
+	if (m_path[(size_t)m_nextPosition.y / 8][(size_t)m_nextPosition.x / 16] == 'w' || m_path[(size_t)m_nextPosition.y / 8][(size_t)m_nextPosition.x / 16] == 'f')
 	{
 		return true;
 	}
@@ -149,8 +157,8 @@ void Sprite::UpdateTexture()
 		}
 		else
 		{
-			//m_spriteShape.setScale(-1.0f, 1.0f);
-			//m_spriteShape.setOrigin(sf::Vector2f(16.0f, 8.0f));
+			// m_spriteShape.setScale(-1.0f, 1.0f);
+			// m_spriteShape.setOrigin(sf::Vector2f(16.0f, 8.0f));
 		}
 		m_spriteShape.setTextureRect(this->m_data->assetManager.GetRect("falling"));
 	}
@@ -224,7 +232,7 @@ void Sprite::UpdateTexture()
 
 void Sprite::IsFalling()
 {
-	if (m_path[(int)m_nextPosition.y / 8][(int)m_nextPosition.x / 16] == 'f' || m_path[(int)m_nextPosition.y / 8][(int)m_nextPosition.x / 16] == 'x' || m_path[(int)m_nextPosition.y / 8][(int)m_nextPosition.x / 16] == ' ')
+	if (m_path[(size_t)m_nextPosition.y / 8][(size_t)m_nextPosition.x / 16] == 'f' || m_path[(size_t)m_nextPosition.y / 8][(size_t)m_nextPosition.x / 16] == 'x' || m_path[(size_t)m_nextPosition.y / 8][(size_t)m_nextPosition.x / 16] == ' ')
 	{
 		m_isFalling = true;
 	}
@@ -236,7 +244,7 @@ void Sprite::IsFalling()
 
 void Sprite::IsInWall()
 {
-	if (m_path[(int)m_nextPosition.y / 8][(int)m_nextPosition.x / 16] == '@' && m_presentPosition.y >= 16)
+	if (m_path[(size_t)m_nextPosition.y / 8][(size_t)m_nextPosition.x / 16] == '@' && m_presentPosition.y >= 16)
 	{
 		m_isInWall = true;
 	}
@@ -275,7 +283,7 @@ void Sprite::IsWaiting()
 
 void Sprite::IsOnRope()
 {
-	if (m_level[((int)m_presentPosition.y) / 16][((int)m_presentPosition.x) / 16] == '_' && m_isFalling == false && IsOnPath())
+	if (m_level[((size_t)m_presentPosition.y) / 16][((size_t)m_presentPosition.x) / 16] == '_' && m_isFalling == false && IsOnPath())
 	{
 		m_isOnRope = true;
 	}
@@ -285,7 +293,7 @@ void Sprite::IsOnRope()
 	}
 	if (m_isOnRope)
 	{
-		if (m_path[((int)m_nextPosition.y + 8) / 8][(int)m_nextPosition.x / 16] == '@')
+		if (m_path[((size_t)m_nextPosition.y + 8) / 8][(size_t)m_nextPosition.x / 16] == '@')
 		{
 			m_isOnRope = false;
 		}
@@ -294,7 +302,7 @@ void Sprite::IsOnRope()
 
 void Sprite::IsOnLadder()
 {
-	if (m_level[((int)m_presentPosition.y) / 16][((int)m_presentPosition.x) / 16] == 'H' && m_isFalling == false)
+	if (m_level[((size_t)m_presentPosition.y) / 16][((size_t)m_presentPosition.x) / 16] == 'H' && m_isFalling == false)
 	{
 		m_isOnLadder = true;
 	}

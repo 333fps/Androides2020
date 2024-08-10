@@ -7,17 +7,17 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
-#include <iostream>
 #include <memory>
 
 class Map
 {
 public:
 	Map(GameDataRef p_data, std::unique_ptr<std::vector<std::string>>& p_level, sf::Color& p_levelColor);
-	~Map()
-	{
-		//std::cout << "**Map Destroyed\t\t\t" << this << std::endl;
-	}
+
+	Map(Map&) = delete;
+	Map& operator=(Map&) = delete;
+
+	~Map();
 
 private:
 	GameDataRef m_data;

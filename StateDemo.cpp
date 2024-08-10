@@ -3,12 +3,14 @@
 
 #include "DEFINITIONS.h"
 
-#include <iostream>
 #include <memory>
 
-StateDemo::StateDemo(GameDataRef p_data) : m_data(p_data)
+StateDemo::StateDemo(GameDataRef p_data) : State{ p_data }, m_data(p_data)
 {
-	//std::cout << "\nState Play Created\t\t" << this << std::endl;
+}
+
+StateDemo::~StateDemo()
+{
 }
 
 void StateDemo::ToggleFullscren()
@@ -25,11 +27,11 @@ void StateDemo::Init()
 	this->m_str_backToMenu1.setCharacterSize(TILE_SIZE / 2);
 	this->m_str_backToMenu1.setString(sf::String("DEMO"));
 	this->m_str_backToMenu1.setFillColor(sf::Color(255, 255, 255, 255));
-	this->m_str_backToMenu1.setPosition(SCREEN_WIDTH / 2 - m_str_backToMenu1.getGlobalBounds().width / 2, TILE_SIZE * 22 + TILE_SIZE / 2);
+	this->m_str_backToMenu1.setPosition(static_cast<float>(SCREEN_WIDTH) / 2 - m_str_backToMenu1.getGlobalBounds().width / 2, TILE_SIZE * 22 + TILE_SIZE / 2);
 
 	this->m_str_backToMenu2 = this->m_str_backToMenu1;
 	this->m_str_backToMenu2.setString(sf::String("PRESS ANY KEY TO GO BACK TO MENU"));
-	this->m_str_backToMenu2.setPosition(SCREEN_WIDTH / 2 - m_str_backToMenu2.getGlobalBounds().width / 2, TILE_SIZE * 24 - TILE_SIZE / 2);
+	this->m_str_backToMenu2.setPosition(static_cast<float>(SCREEN_WIDTH) / 2 - m_str_backToMenu2.getGlobalBounds().width / 2, TILE_SIZE * 24 - TILE_SIZE / 2);
 
 	this->Start();
 }
@@ -76,19 +78,22 @@ void StateDemo::HandleInput()
 			this->m_data->window.close();
 		}
 
-		if (event.type == sf::Event::Resized) {
+		if (event.type == sf::Event::Resized)
+		{
 			auto m_window_width = event.size.width;
 			auto m_window_height = event.size.height;
-			float new_width = ASPECT_RATIO * m_window_height;
-			float new_height = m_window_width / ASPECT_RATIO;
-			float offset_width = (m_window_width - new_width) / 2.0f;
-			float offset_height = (m_window_height - new_height) / 2.0f;
+			float new_width = ASPECT_RATIO * (float)m_window_height;
+			float new_height = (float)m_window_width / ASPECT_RATIO;
+			float offset_width = ((float)m_window_width - new_width) / 2.0f;
+			float offset_height = ((float)m_window_height - new_height) / 2.0f;
 			sf::View view = m_data->window.getDefaultView();
-			if (m_window_width >= ASPECT_RATIO * m_window_height) {
-				view.setViewport(sf::FloatRect(offset_width / m_window_width, 0.0, new_width / m_window_width, 1.0));
+			if ((float)m_window_width >= ASPECT_RATIO * (float)m_window_height)
+			{
+				view.setViewport(sf::FloatRect(offset_width / (float)m_window_width, 0.f, new_width / (float)m_window_width, 1.f));
 			}
-			else {
-				view.setViewport(sf::FloatRect(0.0, offset_height / m_window_height, 1.0, new_height / m_window_height));
+			else
+			{
+				view.setViewport(sf::FloatRect(0.f, offset_height / (float)m_window_height, 1.f, new_height / (float)m_window_height));
 			}
 
 			m_data->window.setView(view);
@@ -150,6 +155,7 @@ void StateDemo::Update(float dt)
 
 void StateDemo::Draw(float dt)
 {
+	(void)dt;
 	this->m_data->window.clear();
 
 	this->m_human->Draw();
@@ -160,7 +166,7 @@ void StateDemo::Draw(float dt)
 	}
 
 	this->m_map->Draw();
-	//this->m_map->DrawPath();
+	// this->m_map->DrawPath();
 
 	this->m_data->window.draw(m_str_backToMenu1);
 	this->m_data->window.draw(m_str_backToMenu2);

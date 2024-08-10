@@ -5,16 +5,13 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-#include <iostream>
-
 class Game
 {
 public:
 	Game(GameDataRef p_data);
-	~Game()
-	{
-		//std::cout << "Game destroyed\t\t" << this << std::endl;
-	}
+
+	~Game();
+
 private:
 	GameDataRef m_data;
 
@@ -89,10 +86,10 @@ public:
 	bool* IsDefeat();
 	int* GetRemainingLives();
 
-	bool IsGameStarted();
+	bool IsGameStarted() const;
 	void StartBlinker();
 
-	int GetFinalSCore();
+	int GetFinalSCore() const;
 
 	void Update(float dt);
 	void Draw();

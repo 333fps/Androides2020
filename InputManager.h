@@ -6,8 +6,8 @@
 class InputManager
 {
 public:
-	InputManager() {}
-	~InputManager() {}
+	InputManager();
+	~InputManager();
 };
 
 #endif // !_INPUT_MANAGER_H_

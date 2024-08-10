@@ -1,23 +1,17 @@
 #include "Map.h"
 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <string>
-#include <iostream>
-
-Map::Map(GameDataRef p_data, std::unique_ptr<std::vector<std::string>>& p_level, sf::Color& p_levelColor) :
-	m_data(p_data),
-	m_level(p_level),
-	m_levelColor(p_levelColor)
+Map::Map(GameDataRef p_data, std::unique_ptr<std::vector<std::string>>& p_level, sf::Color& p_levelColor) : m_data(p_data),
+																											m_level(p_level),
+																											m_levelColor(p_levelColor)
 {
-	//std::cout << "Map Created\t\t\t" << this << std::endl;
-
 	m_tileset = m_data->assetManager.GetTexture("spritesheet");
 
 	Load();
 	CreatePath();
-	//for (auto line : m_path)
-	//	std::cout << line << std::endl;
+}
+
+Map::~Map()
+{
 }
 
 void Map::Load()
@@ -26,11 +20,11 @@ void Map::Load()
 	m_vertices.setPrimitiveType(sf::Quads);
 	m_vertices.resize(m_maxCol * m_maxLine * 4);
 
-	int i = 0;
+	size_t i = 0;
 
 	for (auto line = m_level->begin(); line != m_level->end(); line++)
 	{
-		int j = 0;
+		size_t j = 0;
 
 		for (auto c = line->begin(); c != line->end(); ++c)
 		{
@@ -47,20 +41,20 @@ void Map::Load()
 			}
 			if (tileID != 0)
 			{
-				int tu = tileID % (m_tileset.getSize().x / m_spritesheetTileSize.x);
-				int tv = tileID / (m_tileset.getSize().x / m_spritesheetTileSize.x);
+				auto tu = (unsigned)tileID % (m_tileset.getSize().x / m_spritesheetTileSize.x);
+				auto tv = (unsigned)tileID / (m_tileset.getSize().x / m_spritesheetTileSize.x);
 
 				sf::Vertex* quad = &m_vertices[(i + j * m_maxLine) * 4];
 
-				quad[0].position = sf::Vector2f(j * m_scaledTileSizeX, i * m_scaledTileSizeY);
-				quad[1].position = sf::Vector2f((j + 1) * m_scaledTileSizeX, i * m_scaledTileSizeY);
-				quad[2].position = sf::Vector2f((j + 1) * m_scaledTileSizeX, (i + 1) * m_scaledTileSizeY);
-				quad[3].position = sf::Vector2f(j * m_scaledTileSizeX, (i + 1) * m_scaledTileSizeY);
+				quad[0].position = sf::Vector2f((float)j * m_scaledTileSizeX, (float)i * m_scaledTileSizeY);
+				quad[1].position = sf::Vector2f(((float)j + 1.f) * m_scaledTileSizeX, (float)i * m_scaledTileSizeY);
+				quad[2].position = sf::Vector2f(((float)j + 1.f) * m_scaledTileSizeX, ((float)i + 1.f) * m_scaledTileSizeY);
+				quad[3].position = sf::Vector2f((float)j * m_scaledTileSizeX, ((float)i + 1.f) * m_scaledTileSizeY);
 
-				quad[0].texCoords = sf::Vector2f((float)tu * m_spritesheetTileSize.x, (float)tv * m_spritesheetTileSize.y);
-				quad[1].texCoords = sf::Vector2f(((float)tu + 1) * m_spritesheetTileSize.x, (float)tv * m_spritesheetTileSize.y);
-				quad[2].texCoords = sf::Vector2f(((float)tu + 1) * m_spritesheetTileSize.x, ((float)tv + 1) * m_spritesheetTileSize.y);
-				quad[3].texCoords = sf::Vector2f((float)tu * m_spritesheetTileSize.x, ((float)tv + 1) * m_spritesheetTileSize.y);
+				quad[0].texCoords = sf::Vector2f((float)tu * (float)m_spritesheetTileSize.x, (float)tv * (float)m_spritesheetTileSize.y);
+				quad[1].texCoords = sf::Vector2f(((float)tu + 1.f) * (float)m_spritesheetTileSize.x, (float)tv * (float)m_spritesheetTileSize.y);
+				quad[2].texCoords = sf::Vector2f(((float)tu + 1.f) * (float)m_spritesheetTileSize.x, ((float)tv + 1.f) * (float)m_spritesheetTileSize.y);
+				quad[3].texCoords = sf::Vector2f((float)tu * (float)m_spritesheetTileSize.x, ((float)tv + 1.f) * (float)m_spritesheetTileSize.y);
 
 				if (tileID == 12)
 				{
@@ -86,9 +80,9 @@ void Map::CreatePath()
 	}
 
 	m_remainingBonus = 0;
-	for (int i = 0; i < 44; ++i)
+	for (size_t i = 0; i < 44; ++i)
 	{
-		for (int j = 0; j < 40; ++j)
+		for (size_t j = 0; j < 40; ++j)
 		{
 			if (i > 0)
 			{
@@ -134,10 +128,10 @@ void Map::CreatePath()
 		}
 	}
 
-	//Falling area
-	for (int i = 0; i < 44; ++i)
+	// Falling area
+	for (size_t i = 0; i < 44; ++i)
 	{
-		for (int j = 0; j < 40; ++j)
+		for (size_t j = 0; j < 40; ++j)
 		{
 			if (i > 1)
 			{
@@ -201,7 +195,7 @@ void Map::HoleLife()
 	{
 		auto timer = m_holesTimers.at(0);
 
-		if (timer.getElapsedTime().asSeconds() > 4.5)
+		if (timer.getElapsedTime().asSeconds() > 4.5f)
 		{
 			m_holesTimers.erase(m_holesTimers.begin());
 
@@ -219,7 +213,8 @@ void Map::HoleLife()
 					if ((*it == 'x' || *it == 'T') && i == holeX && j == holeY)
 					{
 						*it = '@';
-					}j++;
+					}
+					j++;
 				}
 				i++;
 			}
@@ -252,7 +247,7 @@ void Map::Draw()
 
 void Map::DrawPath()
 {
-	//for (unsigned int i = 0; i < m_maxLine * 2; ++i)
+	// for (unsigned int i = 0; i < m_maxLine * 2; ++i)
 	//{
 	//	for (unsigned int j = 0; j < m_maxCol; ++j)
 	//	{
@@ -265,9 +260,9 @@ void Map::DrawPath()
 	//			m_data->window.draw(rectangle);
 	//		}
 	//	}
-	//}
+	// }
 
-	//for (unsigned int i = 0; i < m_maxLine * 2; ++i)
+	// for (unsigned int i = 0; i < m_maxLine * 2; ++i)
 	//{
 	//	for (unsigned int j = 0; j < m_maxCol; ++j)
 	//	{
@@ -280,5 +275,5 @@ void Map::DrawPath()
 	//			m_data->window.draw(rectangle);
 	//		}
 	//	}
-	//}
+	// }
 }

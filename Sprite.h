@@ -7,35 +7,35 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
-#include <iostream>
 
 class Sprite
 {
 public:
+	Sprite(GameDataRef p_data, const sf::Vector2f& p_startPosition, std::vector<std::string>& p_path,
+		std::unique_ptr<std::vector<std::string>>& p_level, const sf::Vector2f* p_humanPostion, float p_dtOffset);
+	Sprite(GameDataRef p_data, const sf::Vector2f& p_startPosition, std::vector<std::string>& p_path,
+		std::unique_ptr<std::vector<std::string>>& p_level);
 
-	Sprite(GameDataRef p_data, sf::Vector2f& p_startPosition, std::vector<std::string>& p_path, std::unique_ptr<std::vector<std::string>>& p_level, const sf::Vector2f* p_humanPostion, float p_dtOffset); //Androids
+	Sprite(Sprite&) = delete;
+	Sprite& operator=(Sprite&) = delete;
 
-	Sprite(GameDataRef p_data, sf::Vector2f& p_startPosition, std::vector<std::string>& p_path, std::unique_ptr<std::vector<std::string>>& p_level); //Human
-
-	~Sprite()
-	{
-	}
+	virtual ~Sprite();
 
 	GameDataRef m_data;
 
 	std::vector<std::string>& m_level;
 	std::vector<std::string>& m_path;
-	sf::Vector2f& m_startPosition;
+	const sf::Vector2f& m_startPosition;
 
 	float m_totalTime{ 0.0f };
 
-	//RUN
-	int m_runFrame{ 0 };
+	// RUN
+	size_t m_runFrame{ 0 };
 	std::vector<sf::IntRect> m_animRun;
 	sf::IntRect NextRunFrame();
 
-	//ROPE
-	int m_ropeFrame{ 0 };
+	// ROPE
+	size_t m_ropeFrame{ 0 };
 	std::vector<sf::IntRect> m_animRope;
 	sf::IntRect NextRopeFrame();
 
@@ -46,7 +46,7 @@ public:
 	sf::Vector2f m_nextPosition;
 	sf::Vector2f m_presentPosition;
 
-	float m_dtMax{ 0 };;
+	float m_dtMax{ 0 };
 
 	void UpdateStatus();
 	void CheckDirection();
@@ -69,7 +69,7 @@ public:
 	bool m_isDigging{ false };
 
 	void Init();
-	bool IsInBounds();
+	bool IsInBounds() const;
 
 	bool IsOnPath();
 

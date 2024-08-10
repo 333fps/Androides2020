@@ -9,8 +9,8 @@
 class AssetManager
 {
 public:
-	AssetManager() { }
-	~AssetManager() { }
+	AssetManager();
+	~AssetManager();
 
 	void LoadTexture(std::string p_textureName, std::string p_fileName);
 	sf::Texture& GetTexture(std::string p_textureName);
@@ -19,7 +19,7 @@ public:
 	sf::IntRect GetRect(std::string p_rectName);
 
 	void LoadSound(std::string p_soundName, std::string p_fileName);
-	sf::SoundBuffer& GetSound(std::string p_soundName);
+	const sf::SoundBuffer& GetSound(std::string p_soundName);
 
 	void LoadFont(std::string p_fontName, std::string p_fileName);
 	sf::Font& GetFont(std::string p_fontName);

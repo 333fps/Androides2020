@@ -2,7 +2,7 @@
 #define _DEFINITIONS_H_
 
 constexpr int SCREEN_WIDTH = 1280;
-constexpr char VERSION_NUMBER[] = "v1.4";
+constexpr char VERSION_NUMBER[] = "v1.5";
 
 constexpr float ASPECT_RATIO = 1.6f;
 constexpr int SCREEN_HEIGHT = static_cast<int>(SCREEN_WIDTH / ASPECT_RATIO);
@@ -19,20 +19,20 @@ constexpr int TILE_SIZE = int(SCREEN_WIDTH / 40);
 
 constexpr const float TRANSTION_TIME = 0.05f;
 
-//Fonts
-constexpr char FONT_MICROGRAMMA[] = "Resources/fonts/MicrogrammaDExtendedBold.otf";
-constexpr char FONT_THOMSON[] = "Resources/fonts/Thomson.ttf";
-constexpr char FONT_LODE_RUNNER[] = "Resources/fonts/Lode_Runner_(C64).ttf";
+// Fonts
+constexpr char FONT_MICROGRAMMA[] = "resources/fonts/MicrogrammaDExtendedBold.otf";
+constexpr char FONT_THOMSON[] = "resources/fonts/Thomson.ttf";
+constexpr char FONT_LODE_RUNNER[] = "resources/fonts/Lode_Runner_(C64).ttf";
 
-//Textures
-constexpr char SPRITESHEET[] = "Resources/spritesheet.png";
+// Textures
+constexpr char SPRITESHEET[] = "resources/spritesheet.png";
 
 // Sounds
-constexpr char SOUND_BEEP[] = "Resources/sfx/beep.wav";
-constexpr char SOUND_HIT[] = "Resources/sfx/hit.wav";
-constexpr char SOUND_TICK[] = "Resources/sfx/tick.wav";
-constexpr char SOUND_WIN[] = "Resources/sfx/win.wav";
-constexpr char SOUND_BONUS[] = "Resources/sfx/bonus.wav";
-constexpr char SOUND_DIG[] = "Resources/sfx/dig.wav";
+constexpr char SOUND_BEEP[] = "resources/sfx/beep.wav";
+constexpr char SOUND_HIT[] = "resources/sfx/hit.wav";
+constexpr char SOUND_TICK[] = "resources/sfx/tick.wav";
+constexpr char SOUND_WIN[] = "resources/sfx/win.wav";
+constexpr char SOUND_BONUS[] = "resources/sfx/bonus.wav";
+constexpr char SOUND_DIG[] = "resources/sfx/dig.wav";
 
 #endif // !_DEFINITIONS_H_

@@ -1,9 +1,14 @@
 #include "AndroidDemo.h"
 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <string>
-#include <iostream>
+AndroidDemo::AndroidDemo(GameDataRef p_data, sf::Vector2f& p_startPosition, std::vector<std::string>& p_path,
+	std::unique_ptr<std::vector<std::string>>& p_level)
+	: Sprite(p_data, p_startPosition, p_path, p_level)
+{
+}
+
+AndroidDemo::~AndroidDemo()
+{
+}
 
 void AndroidDemo::NextMotion()
 {
@@ -81,9 +86,12 @@ void AndroidDemo::Update(float p_deltaTime)
 		if (!m_isFalling)
 		{
 			NextMotion();
-			if (!IsInBounds())m_nextPosition = m_presentPosition;
-			if (!IsOnPath())m_nextPosition = m_presentPosition;
-			if (m_isInWall) m_nextPosition.y = m_presentPosition.y - 8.0f;
+			if (!IsInBounds())
+				m_nextPosition = m_presentPosition;
+			if (!IsOnPath())
+				m_nextPosition = m_presentPosition;
+			if (m_isInWall)
+				m_nextPosition.y = m_presentPosition.y - 8.0f;
 		}
 		else
 		{

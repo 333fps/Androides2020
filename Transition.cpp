@@ -1,11 +1,8 @@
 #include "Transition.h"
 
-Transition::Transition(GameDataRef p_data, std::string p_type, bool p_fullscreen) :
-	m_data(p_data),
-	m_fullScreen(p_fullscreen)
+Transition::Transition(GameDataRef p_data, std::string p_type, bool p_fullscreen) : m_data(p_data),
+																					m_fullScreen(p_fullscreen)
 {
-	//std::cout << "Transition Created\t\t" << this << std::endl;
-
 	this->m_brickShape.setTexture(this->m_data->assetManager.GetTexture("spritesheet"));
 	this->m_brickShape.setTextureRect(this->m_data->assetManager.GetRect("brick"));
 	this->m_brickShape.setColor(sf::Color(0, 0, 255, 255));
@@ -37,6 +34,10 @@ Transition::Transition(GameDataRef p_data, std::string p_type, bool p_fullscreen
 			}
 		}
 	}
+}
+
+Transition::~Transition()
+{
 }
 
 void Transition::Update(float dt)
@@ -76,16 +77,16 @@ void Transition::Update(float dt)
 
 void Transition::Draw()
 {
-	unsigned int i = 0;
-	for (auto line : arr)
+	size_t i = 0;
+	for (auto& line : arr)
 	{
-		unsigned int j = 0;
+		size_t j = 0;
 		for (auto val : line)
 		{
 			if (val == m_type)
 			{
-				this->m_blackShape.setPosition(sf::Vector2f(i * (float)TILE_SIZE, j * (float)TILE_SIZE));
-				this->m_brickShapeScaled.setPosition(sf::Vector2f(i * (float)TILE_SIZE, j * (float)TILE_SIZE));
+				this->m_blackShape.setPosition(sf::Vector2f((float)i * (float)TILE_SIZE, (float)j * (float)TILE_SIZE));
+				this->m_brickShapeScaled.setPosition(sf::Vector2f((float)i * (float)TILE_SIZE, (float)j * (float)TILE_SIZE));
 
 				this->m_data->window.draw(m_blackShape);
 				this->m_data->window.draw(m_brickShapeScaled);
@@ -96,7 +97,7 @@ void Transition::Draw()
 	}
 }
 
-bool Transition::IsInProgress()
+bool Transition::IsInProgress() const
 {
 	if (!m_isOver && m_isStarted)
 	{
@@ -108,7 +109,7 @@ bool Transition::IsInProgress()
 	}
 }
 
-bool Transition::IsCompleted()
+bool Transition::IsCompleted() const
 {
 	if (m_isCompleted)
 		return true;

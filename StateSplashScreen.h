@@ -8,16 +8,16 @@
 #include "Transition.h"
 
 #include <memory>
-#include <iostream>
 
 class StateSplash : public State
 {
 public:
 	StateSplash(GameDataRef p_data);
-	~StateSplash()
-	{
-		//std::cout << "**State Splashscreen Destroyed\t" << this << std::endl;
-	}
+
+	StateSplash(StateSplash&) = delete;
+	StateSplash& operator=(StateSplash&) = delete;
+
+	virtual ~StateSplash();
 
 private:
 	GameDataRef m_data;

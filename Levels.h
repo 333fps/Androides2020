@@ -3,75 +3,23 @@
 
 #include <vector>
 #include <string>
-#include <iostream>
 #include <memory>
-#include <iostream>
 
 class Levels
 {
 public:
-	Levels(int p_levelNumber) : m_levelNumber{ p_levelNumber }
-	{
-		//std::cout << "Level Created\t\t\t" << this << std::endl;
-	}
-	~Levels()
-	{
-		//std::cout << "**Level Destroyed\t\t" << this << std::endl;
-	}
+	Levels(int p_levelNumber);
+	~Levels();
 
 private:
 	int m_levelNumber{ 0 };
 	std::vector<std::string> m_level;
 
 public:
-	std::unique_ptr <std::vector<std::string>> GetLevel()
-	{
-		switch (m_levelNumber) {
-		case 0:
-			m_level = m_level_000;
-			break;
-		case 1:
-			m_level = m_level_001;
-			break;
-		case 2:
-			m_level = m_level_002;
-			break;
-		case 3:
-			m_level = m_level_003;
-			break;
-		case 4:
-			m_level = m_level_004;
-			break;
-		case 5:
-			m_level = m_level_005;
-			break;
-		case 6:
-			m_level = m_level_006;
-			break;
-		case 7:
-			m_level = m_level_007;
-			break;
-		case 8:
-			m_level = m_level_008;
-			break;
-		case 9:
-			m_level = m_level_009;
-			break;
-		case 10:
-			m_level = m_level_010;
-			break;
-		case 99:
-			m_level = m_level_099;
-			break;
-		}
-
-		return std::make_unique<std::vector<std::string>>(m_level);
-	}
+	std::unique_ptr<std::vector<std::string>> GetLevel();
 
 private:
-	std::vector<std::string> m_level_000
-
-	{
+	std::vector<std::string> m_level_000{
 		"________________________________________",
 		"H         A                   A         ",
 		"H   @  @  @ @@  @@   @  @ @@  @@@ @@@   ",
@@ -97,8 +45,7 @@ private:
 		"042042255255000"
 	};
 
-	std::vector<std::string> m_level_001
-	{
+	std::vector<std::string> m_level_001{
 		"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
 		"@                                      @",
 		"@   H@@@@@@@@                          @",
@@ -124,8 +71,7 @@ private:
 		"042042255255090"
 	};
 
-	std::vector<std::string> m_level_002
-	{
+	std::vector<std::string> m_level_002{
 		"@@H____                                 ",
 		"@@H                     ____________    ",
 		"@@H    @@@@@@@@    &    H          H  * ",
@@ -151,8 +97,7 @@ private:
 		"255255000255090"
 	};
 
-	std::vector<std::string> m_level_003
-	{
+	std::vector<std::string> m_level_003{
 		"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
 		"@HHH@@@@@@@                            @",
 		"@H H@@@@@@@     *     ___________   *  @",
@@ -178,8 +123,7 @@ private:
 		"255000000255060"
 	};
 
-	std::vector<std::string> m_level_004
-	{
+	std::vector<std::string> m_level_004{
 		"                                        ",
 		"     *  __              *A              ",
 		"H__H@@@@  @@@@H______H@@@@@H    H@@@@@H ",
@@ -205,8 +149,7 @@ private:
 		"000255000255090"
 	};
 
-	std::vector<std::string> m_level_005
-	{
+	std::vector<std::string> m_level_005{
 		"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
 		"H    A   *       ______________________H",
 		"H@@@@@@@@@@@@@@@H                      H",
@@ -232,8 +175,7 @@ private:
 		"000255255255150"
 	};
 
-	std::vector<std::string> m_level_006
-	{
+	std::vector<std::string> m_level_006{
 		"                   H___________H        ",
 		"    *          * A H           H   *A   ",
 		"@@@@@@@@@@@@H@@@@@@@           H@@@@@@@H",
@@ -259,8 +201,7 @@ private:
 		"255000255255080"
 	};
 
-	std::vector<std::string> m_level_007
-	{
+	std::vector<std::string> m_level_007{
 		"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
 		"@      @@@@@@@@@@@@@@@@@@@             @",
 		"@ *    @@@@@@@@@@@@@@@@@@@             H",
@@ -286,8 +227,7 @@ private:
 		"255000000255200"
 	};
 
-	std::vector<std::string> m_level_008
-	{
+	std::vector<std::string> m_level_008{
 		"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
 		"@          @     *     @       *       @",
 		"@H@@@@@@@@H@@@@@@@@@@@H@H@@@@@@@@@@@@@H@",
@@ -313,8 +253,7 @@ private:
 		"000255000255200"
 	};
 
-	std::vector<std::string> m_level_009
-	{
+	std::vector<std::string> m_level_009{
 		"                                        ",
 		"H______________________________________H",
 		"H                                      H",
@@ -340,8 +279,7 @@ private:
 		"042042255255090"
 	};
 
-	std::vector<std::string> m_level_010
-	{
+	std::vector<std::string> m_level_010{
 		"H______________________________________H",
 		"H     A       *      A                 H",
 		"H______________________________________H",
@@ -367,9 +305,7 @@ private:
 		"255255000255090"
 	};
 
-	std::vector<std::string> m_level_099
-
-	{
+	std::vector<std::string> m_level_099{
 		"________________________________________",
 		"H         A                   A         ",
 		"H                                       ",

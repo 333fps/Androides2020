@@ -3,12 +3,14 @@
 
 #include "DEFINITIONS.h"
 
-#include <iostream>
 #include <memory>
 
-StatePlay::StatePlay(GameDataRef p_data) : m_data(p_data)
+StatePlay::StatePlay(GameDataRef p_data) : State{ p_data }, m_data(p_data)
 {
-	//std::cout << "\nState Play Created\t\t" << this << std::endl;
+}
+
+StatePlay::~StatePlay()
+{
 }
 
 void StatePlay::ToggleFullscren()
@@ -48,14 +50,14 @@ void StatePlay::Start()
 	m_human.reset();
 
 	m_currentLevel = std::make_unique<CurrentLevel>(m_levelNumber);
-	//m_currentLevel = std::make_unique<CurrentLevel>(3);
+	// m_currentLevel = std::make_unique<CurrentLevel>(3);
 
 	m_map = std::make_unique<Map>(m_data, m_currentLevel->GetLevel(), m_currentLevel->GetLevelColor());
 
 	m_human = std::make_shared<Human>(m_data, m_currentLevel->GetHumanStartPosition(), m_map->GetPath(), m_currentLevel->GetLevel());
 
 	float dtoffset = 0;
-	for (auto startPosition : m_currentLevel->GetAndroidsStartPositions())
+	for (const auto& startPosition : m_currentLevel->GetAndroidsStartPositions())
 	{
 		auto android = std::make_shared<Android>(m_data, startPosition, m_map->GetPath(), m_currentLevel->GetLevel(), m_human->GetHumanPosition(), dtoffset);
 		m_androids.push_back(android);
@@ -69,14 +71,13 @@ void StatePlay::Start()
 	m_game->NewLevel();
 
 	m_game->SetPlayerStartPosition(m_currentLevel->GetHumanStartPosition());
-	for (auto android : m_androids)
+	for (const auto& android : m_androids)
 	{
 		m_game->SetAndroidCatch(android->isCatching());
 	}
 
-	//auto a = m_human->isDigging();
-
 	m_game->SetHumanDig(m_human->isDigging());
+
 	this->m_fadeIn->Start();
 }
 
@@ -91,19 +92,22 @@ void StatePlay::HandleInput()
 			this->m_data->window.close();
 		}
 
-		if (event.type == sf::Event::Resized) {
+		if (event.type == sf::Event::Resized)
+		{
 			auto m_window_width = event.size.width;
 			auto m_window_height = event.size.height;
-			float new_width = ASPECT_RATIO * m_window_height;
-			float new_height = m_window_width / ASPECT_RATIO;
-			float offset_width = (m_window_width - new_width) / 2.0f;
-			float offset_height = (m_window_height - new_height) / 2.0f;
+			float new_width = ASPECT_RATIO * (float)m_window_height;
+			float new_height = (float)m_window_width / ASPECT_RATIO;
+			float offset_width = ((float)m_window_width - new_width) / 2.0f;
+			float offset_height = ((float)m_window_height - new_height) / 2.0f;
 			sf::View view = m_data->window.getDefaultView();
-			if (m_window_width >= ASPECT_RATIO * m_window_height) {
-				view.setViewport(sf::FloatRect(offset_width / m_window_width, 0.0, new_width / m_window_width, 1.0));
+			if ((float)m_window_width >= ASPECT_RATIO * (float)m_window_height)
+			{
+				view.setViewport(sf::FloatRect(offset_width / (float)m_window_width, 0.f, new_width / (float)m_window_width, 1.f));
 			}
-			else {
-				view.setViewport(sf::FloatRect(0.0, offset_height / m_window_height, 1.0, new_height / m_window_height));
+			else
+			{
+				view.setViewport(sf::FloatRect(0.f, offset_height / (float)m_window_height, 1.f, new_height / (float)m_window_height));
 			}
 
 			m_data->window.setView(view);
@@ -196,6 +200,7 @@ void StatePlay::Update(float dt)
 
 void StatePlay::Draw(float dt)
 {
+	(void)dt;
 	this->m_data->window.clear();
 
 	this->m_human->Draw();
@@ -206,7 +211,7 @@ void StatePlay::Draw(float dt)
 	}
 
 	this->m_map->Draw();
-	//this->m_map->DrawPath();
+	// this->m_map->DrawPath();
 
 	this->m_game->Draw();
 

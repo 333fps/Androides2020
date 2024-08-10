@@ -5,21 +5,14 @@
 #include "GameEngine.h"
 
 #include <array>
-#include <iostream>
 #include <string>
 
 class Transition
 {
 public:
 	Transition(GameDataRef p_data, std::string p_type, bool p_fullScreen);
-	~Transition()
-	{
-		//std::cout << "**Transition Destroyed\t\t" << this << std::endl;
-	}
 
-private:
-	bool m_type{ false };		// "FadeIn", "FadeOut"
-	bool m_fullScreen{ false };
+	~Transition();
 
 protected:
 	bool m_isStarted{ false };
@@ -28,19 +21,23 @@ protected:
 
 protected:
 	GameDataRef m_data;
-	int m_maxline{ 22 };
-	unsigned int m_iStart{ 15 };
-	unsigned int m_jStart{ 15 };
+	size_t m_maxline{ 22 };
+	size_t m_iStart{ 15 };
+	size_t m_jStart{ 15 };
 	sf::Sprite m_brickShape;
 	sf::Sprite m_brickShapeScaled;
 
 	sf::RectangleShape m_blackShape;
 	float m_totalTime{ 0 };
-	std::array<std::array<bool, 25>, 40> arr{ 0 };
+	std::array<std::array<bool, 25>, 40> arr{};
+
+private:
+	bool m_type{ false }; // "FadeIn", "FadeOut"
+	bool m_fullScreen{ false };
 
 public:
-	bool IsInProgress();
-	bool IsCompleted();
+	bool IsInProgress() const;
+	bool IsCompleted() const;
 	void Start();
 	void Update(float dt);
 	void Draw();

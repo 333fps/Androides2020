@@ -10,18 +10,13 @@
 class Android : public Sprite
 {
 public:
-	Android(GameDataRef p_data, sf::Vector2f& p_startPosition, std::vector<std::string>& p_path, std::unique_ptr<std::vector<std::string>>& p_level, const sf::Vector2f* p_humanPostion, float p_dtOffset) : //Androids
-		Sprite(p_data, p_startPosition, p_path, p_level, p_humanPostion, p_dtOffset),
-		m_target(*p_humanPostion)
-	{
-		//std::cout << "Android Created\t\t\t" << this << std::endl;
+	Android(GameDataRef p_data, const sf::Vector2f& p_startPosition, std::vector<std::string>& p_path,
+		std::unique_ptr<std::vector<std::string>>& p_level, const sf::Vector2f* p_humanPostion, float p_dtOffset);
 
-		m_dtMax = 0.12f + p_dtOffset;
-	}
-	~Android()
-	{
-		//std::cout << "**Android Destroyed\t\t" << this << std::endl;
-	}
+	Android(Android&) = delete;
+	Android& operator=(Android&) = delete;
+
+	virtual ~Android();
 
 private:
 	const sf::Vector2f& m_target;

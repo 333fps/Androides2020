@@ -15,16 +15,16 @@
 #include <memory>
 
 #include <string>
-#include <iostream>
 
 class StateGameOver : public State
 {
 public:
 	StateGameOver(GameDataRef p_data, int p_finalScore, int p_finalLevel);
-	~StateGameOver()
-	{
-		//std::cout << "**State Menu Destroyed\t\t" << this << std::endl;
-	}
+
+	StateGameOver(StateGameOver&) = delete;
+	StateGameOver& operator=(StateGameOver&) = delete;
+
+	virtual ~StateGameOver();
 
 private:
 	GameDataRef m_data;
@@ -56,7 +56,7 @@ private:
 	void ToggleFullscren();
 	bool Fullscreen{ false };
 
-	bool m_GotoMenu{ false };
+	//bool m_GotoMenu{ false };
 
 private:
 	void Init();

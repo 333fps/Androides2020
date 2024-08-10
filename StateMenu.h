@@ -12,17 +12,15 @@
 
 #include <memory>
 
-#include <string>
-#include <iostream>
-
 class StateMenu : public State
 {
 public:
 	StateMenu(GameDataRef p_data);
-	~StateMenu()
-	{
-		//std::cout << "**State Menu Destroyed\t\t" << this << std::endl;
-	}
+
+	StateMenu(StateMenu&) = delete;
+	StateMenu& operator=(StateMenu&) = delete;
+
+	virtual ~StateMenu();
 
 private:
 	GameDataRef m_data;

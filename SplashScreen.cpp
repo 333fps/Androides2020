@@ -6,11 +6,8 @@
 #include <ctime>
 #include <string>
 
-SplashScreen::SplashScreen(GameDataRef p_data) :
-	m_data(p_data)
+SplashScreen::SplashScreen(GameDataRef p_data) : m_data(p_data)
 {
-	//std::cout << "Splashscreen Created\t\t" << this << std::endl;
-
 	// Rectangle Machine name
 	this->m_shape_machineName.setFillColor(COLOR_STONE_BLUE);
 	this->m_shape_machineName.setSize(sf::Vector2f(SCREEN_WIDTH - 0.05 * SCREEN_WIDTH, 0.32f * SCREEN_HEIGHT));
@@ -23,12 +20,12 @@ SplashScreen::SplashScreen(GameDataRef p_data) :
 	this->m_txt_machineName.setFont(this->m_data->assetManager.GetFont("Microgramma"));
 	this->m_txt_machineName.setString("ANDROIDES");
 	this->m_txt_machineName.setFillColor(sf::Color::Transparent);
-	this->m_txt_machineName.setCharacterSize(static_cast<int>(0.5f * m_shape_machineName.getGlobalBounds().height));
+	this->m_txt_machineName.setCharacterSize(static_cast<unsigned int>(0.5f * m_shape_machineName.getGlobalBounds().height));
 	this->m_txt_machineName.setOrigin(sf::Vector2f(m_txt_machineName.getGlobalBounds().left + m_txt_machineName.getGlobalBounds().width / 2, m_txt_machineName.getGlobalBounds().top + m_txt_machineName.getGlobalBounds().height / 2));
 	this->m_txt_machineName.setPosition(sf::Vector2f(m_shape_machineName.getGlobalBounds().width / 2, m_shape_machineName.getGlobalBounds().height / 2));
 	this->m_txt_machineName.setOutlineColor(sf::Color::White);
 	this->m_txt_machineName.setOutlineThickness(1.0f);
-	//this->m_txt_machineName.setLetterSpacing(1.5f);
+	this->m_txt_machineName.setLetterSpacing(1.5f);
 
 	// Version
 	this->m_txt_version.setFont(this->m_data->assetManager.GetFont("Microgramma"));
@@ -37,7 +34,7 @@ SplashScreen::SplashScreen(GameDataRef p_data) :
 	this->m_txt_version.setCharacterSize(10);
 	this->m_txt_version.setOrigin(sf::Vector2f(m_txt_version.getGlobalBounds().width, 0.0f));
 	this->m_txt_version.setPosition(sf::Vector2f(m_shape_machineName.getGlobalBounds().width, m_shape_machineName.getGlobalBounds().height));
-	//this->m_txt_version.setLetterSpacing(2.0f); <-- SFML 2.5
+	this->m_txt_version.setLetterSpacing(2.0f);
 
 	// Brand
 	this->m_txt_ThomsonBrand.setFont(this->m_data->assetManager.GetFont("Microgramma"));
@@ -46,7 +43,7 @@ SplashScreen::SplashScreen(GameDataRef p_data) :
 	this->m_txt_ThomsonBrand.setCharacterSize(20);
 	this->m_txt_ThomsonBrand.setOrigin(sf::Vector2f(m_txt_ThomsonBrand.getGlobalBounds().width, 0.0f));
 	this->m_txt_ThomsonBrand.setPosition(sf::Vector2f(m_shape_machineName.getGlobalBounds().width, 0.36f * SCREEN_HEIGHT));
-	//this->m_txt_ThomsonBrand.setLetterSpacing(2.0f); <-- SFML 2.5
+	this->m_txt_ThomsonBrand.setLetterSpacing(2.0f);
 
 	// Date
 	this->m_txt_date.setFont(this->m_data->assetManager.GetFont("Thomson"));
@@ -54,7 +51,7 @@ SplashScreen::SplashScreen(GameDataRef p_data) :
 	this->m_txt_date.setFillColor(COLOR_STONE_BLUE);
 	this->m_txt_date.setCharacterSize(14);
 	this->m_txt_date.setPosition(sf::Vector2f(xPos + 6.0f, 0.56f * SCREEN_HEIGHT));
-	//this->m_txt_date.setLetterSpacing(2.0f); <-- SFML 2.5
+	this->m_txt_date.setLetterSpacing(2.0f);
 
 	// Ram
 	this->m_txt_ram = this->m_txt_date;
@@ -125,7 +122,7 @@ SplashScreen::SplashScreen(GameDataRef p_data) :
 
 	// String3
 	this->m_txt_Str3 = this->m_txt_Str2;
-	this->m_txt_Str3.setString(L"3 Réglage et préférences");
+	this->m_txt_Str3.setString(L"3 RÃ©glage et prÃ©fÃ©rences");
 	this->m_txt_Str3.setPosition(sf::Vector2f(xPos + 218.0f, 0.74 * SCREEN_HEIGHT));
 
 	// String4
@@ -153,6 +150,10 @@ SplashScreen::SplashScreen(GameDataRef p_data) :
 	this->m_txt_Str8 = this->m_txt_Str6;
 	this->m_txt_Str8.setString("E");
 	this->m_txt_Str8.setPosition(sf::Vector2f(SCREEN_WIDTH - 0.05 * SCREEN_WIDTH, 0.785 * SCREEN_HEIGHT));
+}
+
+SplashScreen::~SplashScreen()
+{
 }
 
 void SplashScreen::Draw()
@@ -189,7 +190,7 @@ std::string SplashScreen::getLocalDate()
 	time_t t = time(0);
 	struct tm* timeStruct = localtime(&t);
 
-	int numberOfZero{ 0 };
+	size_t numberOfZero{ 0 };
 
 	std::string tmp_strDay = std::to_string(timeStruct->tm_mday);
 	numberOfZero = 2 - tmp_strDay.length();
@@ -203,5 +204,5 @@ std::string SplashScreen::getLocalDate()
 	numberOfZero = 2 - tmp_strYear.length();
 	std::string strYear = std::string(numberOfZero, '0').append(tmp_strYear);
 
-	return  strDay + "-" + strMonth + "-" + strYear;
+	return strDay + "-" + strMonth + "-" + strYear;
 }
